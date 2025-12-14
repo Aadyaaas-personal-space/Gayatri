@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gayatri Private Portal</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fde2f3, #e8e7ff, #d4f2ff);
+            background-size: 400% 400%;
+            animation: bgAnimation 16s ease infinite;
+        }
+
+        @keyframes bgAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: fixed;
+            bottom: -10px;
+            font-size: 18px;
+            opacity: 0.7;
+            animation: floatUp 6s linear infinite;
+            color: #ff67a8;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0); opacity: 0.7; }
+            100% { transform: translateY(-110vh) translateX(40px); opacity: 0; }
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #ffffffaa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .loader {
+            border: 6px solid #eee;
+            border-top: 6px solid #8b46ff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Password Box */
+        #password-screen {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-box {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            padding: 40px;
+            width: 330px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.5);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Dashboard */
+        #dashboard {
+            display: none;
+            padding: 40px;
+        }
+
+        .header-title {
+            font-size: 2.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            background: -webkit-linear-gradient(#8b46ff, #ff4cad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cards */
+        .card-box-link { 
+            text-decoration: none; 
+            color: inherit; 
+        }
+
+        .card-box {
+            height: 210px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.35s;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-box:hover {
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+        }
+
+        .card-box i {
+            font-size: 2.7rem;
+            color: #8b46ff;
+        }
+
+        .card-title-custom {
+            margin-top: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Floating Hearts -->
+<script>
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}, 700);
+</script>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+</div>
+
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+    <source src="https://files.catbox.moe/4q7p9d.mp3" type="audio/mp3">
+</audio>
+
+<!-- PASSWORD SCREEN -->
+<div id="password-screen">
+    <div class="password-box">
+        <h2 style="font-weight:600;">Enter Password</h2>
+        <input id="passInput" type="password" placeholder="Password" class="form-control mt-3">
+        <button class="btn btn-primary w-100 mt-3" style="border-radius:12px; background:#8b46ff; border:none;" onclick="checkPass()">Unlock</button>
+        <p id="error" class="text-danger mt-3" style="display:none;">Incorrect Password!</p>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+    <h1 class="header-title">Gayatri's Private Space</h1>
+
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- Message -->
+            <div class="col-md-6 col-lg-3">
+                <a href="message.html" class="card-box-link">
+                    <div class="card-box">
+                        <div>
+                            <i class="bi bi-chat-heart-fill"></i>
+                            <div class="card-title-custom">The Message From Me</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Memories -->
+            <div class="col-md-6 col-lg-3">
+                <a href="memories.html" class="card-box-link">
+                    <div class="card-box">
+                        <div>
+                            <i class="bi bi-images"></i>
+                            <div class="card-title-custom">Memories</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Me Knows You -->
+            <div class="col-md-6 col-lg-3">
+                <a href="Meknowsyou.html" class="card-box-link">
+                    <div class="card-box">
+                        <div>
+                            <i class="bi bi-person-heart"></i>
+                            <div class="card-title-custom">Dedicated To Gayu!</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Graph -->
+            <div class="col-md-6 col-lg-3">
+                <a href="Graph.html" class="card-box-link">
+                    <div class="card-box" onclick="openGraph()">
+                        <div>
+                            <i class="bi bi-pie-chart-fill"></i>
+                            <div class="card-title-custom">Love Graph</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Loading Screen
+window.onload = function() {
+    setTimeout(() => {
+        document.getElementById("loading-screen").style.display = "none";
+    }, 1200);
+};
+
+// Password Check
+function checkPass() {
+    const pass = document.getElementById("passInput").value;
+
+    if (pass === "Gayu1808") {
+        document.getElementById("password-screen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        document.getElementById("bgMusic").play();
+    } else {
+        document.getElementById("error").style.display = "block";
+    }
+}
+</script>
+
+<script>
+function openGraph() {
+    const graphWindow = window.open('', '', 'width=450,height=500');
+    graphWindow.document.write(`
+        <html>
+        <head>
+            <title>Love Graph</title>
+            <style>
+                body { 
+                    font-family: Poppins, sans-serif; 
+                    display:flex;justify-content:center;align-items:center;height:100vh; 
+                    background: linear-gradient(135deg,#ffe4f1,#e8e7ff,#d4f2ff);
+                }
+                .circle {
+                    width: 300px;
+                    height: 300px;
+                    border-radius: 50%;
+                    background: conic-gradient(
+                        #ff4f8b 0% 40%,   
+                        #7b57ff 40% 70%,  
+                        #ff9b4f 70% 90%,  
+                        #5dd1ff 90% 100%  
+                    );
+                    position: relative;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                }
+                .labels {
+                    position:absolute;
+                    bottom:20px;
+                    left:50%;
+                    transform:translateX(-50%);
+                    text-align:center;
+                }
+                span {
+                    display:block;
+                    margin:5px;
+                    font-weight:600;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="circle"></div>
+            <div class="labels">
+                <span>❤️ Love: 40%</span>
+                <span>💙 Miss: 30%</span>
+                <span>🧡 Unhappy Without You: 20%</span>
+                <span>💜 More: 10%</span>
+            </div>
+        </body>
+        </html>
+    `);
+}
+</script>
+
+</body>
+</html>

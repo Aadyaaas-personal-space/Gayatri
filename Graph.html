@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graph - Love Meter</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #ffe3f3, #d8c7ff);
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        main nav {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+        }
+
+        /* CENTER CARD */
+        .graph-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .title {
+            font-size: 35px;
+            font-weight: 700;
+            color: #ff2a74;
+            margin-bottom: 15px;
+            animation: fadeInDown 1.2s ease;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #6b4e9b;
+            margin-bottom: 35px;
+            animation: fadeInUp 1.3s ease;
+        }
+
+        .graph-card {
+            background: white;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 25px;
+            box-shadow: 0 8px 35px rgba(0,0,0,0.12);
+            animation: floatUp 1.4s ease;
+        }
+
+        @keyframes fadeInDown { from { opacity:0; transform: translateY(-25px); } to { opacity:1; transform: translateY(0);} }
+        @keyframes fadeInUp { from { opacity:0; transform: translateY(25px); } to { opacity:1; transform: translateY(0);} }
+        @keyframes floatUp { from { opacity:0; transform: translateY(40px) scale(0.9);} to {opacity:1; transform: translateY(0) scale(1);} }
+    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<main>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="message.html">Msg For Me</a>
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavId">
+                <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="Memories.html">Memories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Meknowsyou.html">Dedicated To Gayu!</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Graph.html">Graph</a></li>
+                </ul>
+                <button class="btn btn-outline-success"><a class="nav-link" href="index.html">Logout</a></button>
+            </div>
+        </div>
+    </nav>
+</main>
+
+<div class="graph-wrapper">
+    <div class="title">My Feelings For You ❤️</div>
+    <div class="subtitle">Everything I feel for you, represented beautifully.</div>
+
+    <div class="graph-card">
+        <canvas id="loveGraph"></canvas>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('loveGraph');
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'How much I love you',
+                'How much I miss you',
+                'How much I am unhappy without you',
+                'How much I get angry on you',
+                'How much I am excited for you'
+            ],
+            datasets: [{
+                data: [99, 90, 85, 10, 88],
+                backgroundColor: [
+                    '#ff4f84',
+                    '#a56bff',
+                    '#ffcd66',
+                    '#6bd6ff',
+                    '#6bff9c'
+                ],
+                borderColor: '#fff',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { size: 14 } }
+                }
+            }
+        }
+    });
+</script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
